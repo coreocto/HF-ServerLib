@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/HF-ServerLib.iml" filepath="$PROJECT_DIR$/.idea/modules/HF-ServerLib.iml" />
+      <module fileurl="file://$PROJECT_DIR$/HF-ServerLib.iml" filepath="$PROJECT_DIR$/HF-ServerLib.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/HF-ServerLib_main.iml" filepath="$PROJECT_DIR$/.idea/modules/HF-ServerLib_main.iml" group="HF-ServerLib" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/HF-ServerLib_test.iml" filepath="$PROJECT_DIR$/.idea/modules/HF-ServerLib_test.iml" group="HF-ServerLib" />
     </modules>

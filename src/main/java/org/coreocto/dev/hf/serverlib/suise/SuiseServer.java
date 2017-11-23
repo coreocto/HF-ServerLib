@@ -8,8 +8,7 @@ import java.util.Map;
 
 import org.coreocto.dev.hf.commonlib.suise.bean.AddTokenResult;
 import org.coreocto.dev.hf.commonlib.suise.util.SuiseUtil;
-import org.coreocto.dev.hf.commonlib.util.IBase64;
-import org.coreocto.dev.hf.commonlib.util.IMd5;
+import org.coreocto.dev.hf.commonlib.util.Registry;
 
 public class SuiseServer {
 
@@ -64,19 +63,31 @@ public class SuiseServer {
                 String fileId = entry.getKey();
                 List<String> tmpList = entry.getValue();
 
-                for (int i = 0; i < tmpList.size(); i++) {
+                int listSize = tmpList.size();
+
+                for (int i = 0; i < listSize; i++) {
                     String ci = tmpList.get(i);
 
                     // generate random 16 bytes
                     byte[] randomBytes = new byte[16];
                     suiseUtil.setRandomBytes(randomBytes, i);
 
-                    String randomVal = suiseUtil.getBase64().encodeToString(randomBytes);
+                    Registry registry = suiseUtil.getRegistry();
+
+                    String randomVal = registry.getBase64().encodeToString(randomBytes);
+
+                    byte[] srhTknBytes = null;
+
+                    try{
+                        srhTknBytes = searchToken.getBytes("UTF-8");
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
 
                     // split the saved ci into li & ri
-                    String li = suiseUtil.H(searchToken, randomVal);
+                    byte[] li = suiseUtil.H(srhTknBytes, randomBytes);
 
-                    if ((li + randomVal).equals(ci)) {
+                    if ((registry.getBase64().encodeToString(li) + randomVal).equals(ci)) {
                         iw.add(fileId);
                     }
                 }
@@ -100,4 +111,3 @@ public class SuiseServer {
         encFileList.remove(fileId);
     }
 }
-
