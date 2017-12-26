@@ -1,14 +1,15 @@
 package org.coreocto.dev.hf.serverlib.suise;
 
+import org.coreocto.dev.hf.commonlib.suise.bean.AddTokenResult;
+import org.coreocto.dev.hf.commonlib.suise.util.SuiseUtil;
+import org.coreocto.dev.hf.commonlib.util.IBase64;
+import org.coreocto.dev.hf.commonlib.util.Registry;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import org.coreocto.dev.hf.commonlib.suise.bean.AddTokenResult;
-import org.coreocto.dev.hf.commonlib.suise.util.SuiseUtil;
-import org.coreocto.dev.hf.commonlib.util.Registry;
 
 public class SuiseServer {
 
@@ -59,6 +60,10 @@ public class SuiseServer {
             iw = searchTokenIdx.get(searchToken);
         } else {
             iw = new ArrayList<>();
+
+            Registry registry = suiseUtil.getRegistry();
+            IBase64 base64 = registry.getBase64();
+
             for (Map.Entry<String, List<String>> entry : regularIdx.entrySet()) {
                 String fileId = entry.getKey();
                 List<String> tmpList = entry.getValue();
@@ -72,22 +77,20 @@ public class SuiseServer {
                     byte[] randomBytes = new byte[16];
                     suiseUtil.setRandomBytes(randomBytes, i);
 
-                    Registry registry = suiseUtil.getRegistry();
-
-                    String randomVal = registry.getBase64().encodeToString(randomBytes);
+                    String randomVal = base64.encodeToString(randomBytes);
 
                     byte[] srhTknBytes = null;
 
-                    try{
-                        srhTknBytes = searchToken.getBytes("UTF-8");
-                    }catch (Exception e){
+                    try {
+                        srhTknBytes = base64.decodeToByteArray(searchToken);
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
 
                     // split the saved ci into li & ri
                     byte[] li = suiseUtil.H(srhTknBytes, randomBytes);
 
-                    if ((registry.getBase64().encodeToString(li) + randomVal).equals(ci)) {
+                    if ((base64.encodeToString(li) + randomVal).equals(ci)) {
                         iw.add(fileId);
                     }
                 }
