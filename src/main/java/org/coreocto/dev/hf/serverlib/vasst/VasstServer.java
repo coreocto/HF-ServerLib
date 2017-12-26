@@ -74,7 +74,7 @@ public class VasstServer {
 
         List<RelScore> result = new ArrayList<>();
 
-        double idf = Math.log(docCnt / matchDocCnt);
+        double idf = Math.log(docCnt * 1.0 / matchDocCnt);
 
         for (Map.Entry<String, Double> scoreEntry : docTermFreqs.entrySet()) {
             String docId = scoreEntry.getKey();
