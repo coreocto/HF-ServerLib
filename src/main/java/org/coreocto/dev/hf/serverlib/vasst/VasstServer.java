@@ -1,9 +1,9 @@
 package org.coreocto.dev.hf.serverlib.vasst;
 
+import org.coreocto.dev.hf.commonlib.sse.vasst.bean.RelScore;
+import org.coreocto.dev.hf.commonlib.sse.vasst.bean.SearchResult;
+import org.coreocto.dev.hf.commonlib.sse.vasst.bean.TermFreq;
 import org.coreocto.dev.hf.commonlib.util.Registry;
-import org.coreocto.dev.hf.commonlib.vasst.bean.RelScore;
-import org.coreocto.dev.hf.commonlib.vasst.bean.SearchResult;
-import org.coreocto.dev.hf.commonlib.vasst.bean.TermFreq;
 
 import java.io.File;
 import java.util.*;
