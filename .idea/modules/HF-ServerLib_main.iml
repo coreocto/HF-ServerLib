@@ -9,6 +9,6 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="Gradle: com.github.coreocto:HF-CommonLib:4cb878d" level="project" />
+    <orderEntry type="library" name="Gradle: com.github.coreocto:HF-CommonLib:03596ca" level="project" />
   </component>
 </module>
