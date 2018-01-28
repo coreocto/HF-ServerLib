@@ -13,5 +13,5 @@ repositories {
 
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
-    compile 'com.github.coreocto:HF-CommonLib:e19d5886a3'
+    compile 'com.github.coreocto:HF-CommonLib:94ff264'
 }

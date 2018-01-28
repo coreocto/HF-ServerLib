@@ -10,7 +10,7 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="HF-ServerLib_main" />
-    <orderEntry type="library" name="Gradle: com.github.coreocto:HF-CommonLib:e19d5886a3" level="project" />
+    <orderEntry type="library" name="Gradle: com.github.coreocto:HF-CommonLib:94ff264" level="project" />
     <orderEntry type="library" name="Gradle: junit:junit:4.12" level="project" />
     <orderEntry type="library" name="Gradle: org.hamcrest:hamcrest-core:1.3" level="project" />
   </component>
