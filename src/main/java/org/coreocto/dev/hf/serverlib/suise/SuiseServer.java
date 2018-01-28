@@ -6,6 +6,8 @@ import org.coreocto.dev.hf.commonlib.util.IBase64;
 import org.coreocto.dev.hf.commonlib.util.Registry;
 
 import java.io.File;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -62,7 +64,7 @@ public class SuiseServer {
     }
 
 
-    public List<String> Search(String searchToken) {
+    public List<String> Search(String searchToken) throws NoSuchAlgorithmException, InvalidKeyException {
 
         List<String> iw = null;
 

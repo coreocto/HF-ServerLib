@@ -2,8 +2,8 @@ package org.coreocto.dev.hf.serverlib.mces;
 
 import org.coreocto.dev.hf.commonlib.crypto.IByteCipher;
 import org.coreocto.dev.hf.commonlib.sse.mces.CT;
+import org.coreocto.dev.hf.commonlib.sse.mces.KeyCipher;
 import org.coreocto.dev.hf.commonlib.util.IBase64;
-import org.coreocto.dev.hf.serverlib.crypto.AesCbcPkcs5BcImpl;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
@@ -30,7 +30,7 @@ public class McesServer {
         this.cipherText = cipherText;
     }
 
-    public String Query2(List<String> queryObj) throws NoSuchPaddingException, InvalidKeyException, NoSuchAlgorithmException, IllegalBlockSizeException, BadPaddingException, InvalidAlgorithmParameterException {
+    public String Query2(List<String> queryObj, KeyCipher keyCipher) throws NoSuchPaddingException, InvalidKeyException, NoSuchAlgorithmException, IllegalBlockSizeException, BadPaddingException, InvalidAlgorithmParameterException {
 
         //queryObj = {root,T1,...,Tm}
 
@@ -60,8 +60,8 @@ public class McesServer {
                 String f1 = null;
 
                 try {
-                    IByteCipher f2Cipher = new AesCbcPkcs5BcImpl(f2_in_bytes, new byte[16]);
-                    byte[] f1_bytes = f2Cipher.decrypt(Ti_in_bytes);
+                    IByteCipher f2Cipher = keyCipher.getByteCipher();
+                    byte[] f1_bytes = f2Cipher.decrypt(Ti_in_bytes, f2_in_bytes, new byte[16]);
                     f1 = base64.encodeToString(f1_bytes);
                 } catch (BadPaddingException ex) {
                     //sometime when different keys are used for encryption/decryption
