@@ -1,9 +1,10 @@
 package org.coreocto.dev.hf.serverlib.suise;
 
+import org.apache.log4j.Logger;
+import org.coreocto.dev.hf.commonlib.crypto.IKeyedHashFunc;
 import org.coreocto.dev.hf.commonlib.sse.suise.bean.AddTokenResult;
 import org.coreocto.dev.hf.commonlib.sse.suise.util.SuiseUtil;
 import org.coreocto.dev.hf.commonlib.util.IBase64;
-import org.coreocto.dev.hf.commonlib.util.Registry;
 
 import java.io.File;
 import java.security.InvalidKeyException;
@@ -15,9 +16,12 @@ import java.util.Map;
 
 public class SuiseServer {
 
+    private static final Logger LOGGER = Logger.getLogger(SuiseServer.class);
+
     private Map<String, List<String>> regularIdx = null;
     private Map<String, List<String>> searchTokenIdx = null;
     private Map<String, File> encFileList = null;
+    private IBase64 base64 = null;
 
     private SuiseUtil suiseUtil = null;
 
@@ -31,12 +35,13 @@ public class SuiseServer {
 
     private boolean dataProtected = true;
 
-    public SuiseServer(SuiseUtil suiseUtil) {
+    public SuiseServer(SuiseUtil suiseUtil, IBase64 base64) {
         this.regularIdx = new HashMap<String, List<String>>();
         this.searchTokenIdx = new HashMap<String, List<String>>();
         this.encFileList = new HashMap<String, File>();
 
         this.suiseUtil = suiseUtil;
+        this.base64 = base64;
     }
 
     public void Add(String fileId, File encFile, List<String> c, List<String> x) {
@@ -64,7 +69,7 @@ public class SuiseServer {
     }
 
 
-    public List<String> Search(String searchToken) throws NoSuchAlgorithmException, InvalidKeyException {
+    public List<String> Search(String searchToken, IKeyedHashFunc keyedHashFunc) throws NoSuchAlgorithmException, InvalidKeyException {
 
         List<String> iw = null;
 
@@ -73,8 +78,8 @@ public class SuiseServer {
         } else {
             iw = new ArrayList<>();
 
-            Registry registry = suiseUtil.getRegistry();
-            IBase64 base64 = registry.getBase64();
+//            Registry registry = suiseUtil.getRegistry();
+//            IBase64 base64 = registry.getBase64();
 
             for (Map.Entry<String, List<String>> entry : regularIdx.entrySet()) {
                 String fileId = entry.getKey();
@@ -103,11 +108,11 @@ public class SuiseServer {
                         try {
                             srhTknBytes = base64.decodeToByteArray(searchToken);
                         } catch (Exception e) {
-                            e.printStackTrace();
+                            LOGGER.error("error when decoding searchToken into bytes", e);
                         }
 
                         // split the saved ci into li & ri
-                        byte[] li = suiseUtil.H(srhTknBytes, randomBytes);
+                        byte[] li = suiseUtil.H(srhTknBytes, randomBytes, keyedHashFunc);
 
                         if ((base64.encodeToString(li) + randomVal).equals(ci)) {
                             iw.add(fileId);
