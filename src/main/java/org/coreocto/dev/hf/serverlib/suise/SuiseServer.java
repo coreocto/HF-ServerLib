@@ -9,10 +9,7 @@ import org.coreocto.dev.hf.commonlib.util.IBase64;
 import java.io.File;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class SuiseServer {
 
@@ -85,8 +82,7 @@ public class SuiseServer {
                 String fileId = entry.getKey();
                 List<String> tmpList = entry.getValue();
 
-
-                if (dataProtected) {
+                if (!dataProtected) {
                     if (tmpList.contains(searchToken)) {
                         iw.add(fileId);
                     }
@@ -94,29 +90,51 @@ public class SuiseServer {
 
                     int listSize = tmpList.size();
 
+                    byte[] randomBytes = new byte[16];
+                    byte[] hashBytes = new byte[16];
+                    byte[] srhTknBytes = null;
+
+                    try {
+                        srhTknBytes = base64.decodeToByteArray(searchToken);
+                    } catch (Exception e) {
+                        LOGGER.error("error when decoding searchToken into bytes", e);
+                        continue;
+                    }
+
                     for (int i = 0; i < listSize; i++) {
                         String ci = tmpList.get(i);
 
-                        // generate random 16 bytes
-                        byte[] randomBytes = new byte[16];
-                        suiseUtil.setRandomBytes(randomBytes, i);
+                        byte[] data = base64.decodeToByteArray(ci);
 
-                        String randomVal = base64.encodeToString(randomBytes);
+                        if (data == null || data.length < 32) {
+                            continue;
+                        } else {
 
-                        byte[] srhTknBytes = null;
+                            //first 16 bytes are the hash value
+                            System.arraycopy(data, 0, hashBytes, 0, 16);
 
-                        try {
-                            srhTknBytes = base64.decodeToByteArray(searchToken);
-                        } catch (Exception e) {
-                            LOGGER.error("error when decoding searchToken into bytes", e);
+                            //last 16 bytes are the random number
+                            System.arraycopy(data, 16, randomBytes, 0, 16);
+
+                            byte[] hashedTokenBytes = keyedHashFunc.getHash(srhTknBytes, randomBytes);
+
+                            if (Arrays.equals(hashBytes, hashedTokenBytes)) {
+                                iw.add(fileId);
+                            }
                         }
 
-                        // split the saved ci into li & ri
-                        byte[] li = suiseUtil.H(srhTknBytes, randomBytes, keyedHashFunc);
-
-                        if ((base64.encodeToString(li) + randomVal).equals(ci)) {
-                            iw.add(fileId);
-                        }
+//                        // generate random 16 bytes
+//                        suiseUtil.setRandomBytes(randomBytes, i);
+//
+//                        String randomVal = base64.encodeToString(randomBytes);
+//
+//
+//                        // split the saved ci into li & ri
+//                        byte[] li = suiseUtil.H(srhTknBytes, randomBytes, keyedHashFunc);
+//
+//                        if ((base64.encodeToString(li) + randomVal).equals(ci)) {
+//                            iw.add(fileId);
+//                        }
                     }
                 }
             }

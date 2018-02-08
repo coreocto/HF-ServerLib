@@ -69,8 +69,6 @@ public class McesServer {
                     canDecrypt = false;
                 }
 
-                System.out.println(Ti+" = "+f2+" + "+f1);
-
                 List<String> tmp = D.get(f1);
 
                 if (tmp != null) {
@@ -88,7 +86,7 @@ public class McesServer {
     public List<String> Query4(List<String> x) {
         List<String> result = new ArrayList<>();
         Map<String, String> C = cipherText.getC();
-        for (int i=0;i<x.size();i++){
+        for (int i = 0; i < x.size(); i++) {
             result.add(C.get(x.get(i)));
         }
         return result;
@@ -107,7 +105,7 @@ public class McesServer {
         List<String> L = new ArrayList<>();
 
         int yLen = y.size();
-        for (int i=0;i<yLen;i++){
+        for (int i = 0; i < yLen; i++) {
             L.add(this.cipherText.getL().get(y.get(i)));
         }
 
