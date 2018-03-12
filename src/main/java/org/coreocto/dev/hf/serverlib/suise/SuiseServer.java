@@ -75,9 +75,6 @@ public class SuiseServer {
         } else {
             iw = new ArrayList<>();
 
-//            Registry registry = suiseUtil.getRegistry();
-//            IBase64 base64 = registry.getBase64();
-
             for (Map.Entry<String, List<String>> entry : regularIdx.entrySet()) {
                 String fileId = entry.getKey();
                 List<String> tmpList = entry.getValue();
@@ -122,19 +119,6 @@ public class SuiseServer {
                                 iw.add(fileId);
                             }
                         }
-
-//                        // generate random 16 bytes
-//                        suiseUtil.setRandomBytes(randomBytes, i);
-//
-//                        String randomVal = base64.encodeToString(randomBytes);
-//
-//
-//                        // split the saved ci into li & ri
-//                        byte[] li = suiseUtil.H(srhTknBytes, randomBytes, keyedHashFunc);
-//
-//                        if ((base64.encodeToString(li) + randomVal).equals(ci)) {
-//                            iw.add(fileId);
-//                        }
                     }
                 }
             }

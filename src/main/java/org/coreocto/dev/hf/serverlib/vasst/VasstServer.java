@@ -3,7 +3,6 @@ package org.coreocto.dev.hf.serverlib.vasst;
 import org.coreocto.dev.hf.commonlib.sse.vasst.bean.RelScore;
 import org.coreocto.dev.hf.commonlib.sse.vasst.bean.SearchResult;
 import org.coreocto.dev.hf.commonlib.sse.vasst.bean.TermFreq;
-import org.coreocto.dev.hf.commonlib.util.Registry;
 
 import java.io.File;
 import java.util.*;
@@ -13,10 +12,7 @@ public class VasstServer {
     private Map<String, TermFreq> I = null;
     private Map<String, File> F = null;
 
-    private Registry registry = null;
-
-    public VasstServer(Registry registry) {
-        this.registry = registry;
+    public VasstServer() {
         this.I = new HashMap<>();
         this.F = new HashMap<>();
     }
@@ -41,9 +37,6 @@ public class VasstServer {
     public List<RelScore> ScoreCalculate(String encKeyword) {
 
         Map<String, Double> docTermFreqs = new HashMap<>();    //docIds which contains the given keyword
-
-//        int maxTermFreq = 0;    //this max term freq should refer to the most freq keyword in particular document
-        //the below implementation is incorrect and need to be refined
 
         int docCnt = I.size();
         int matchDocCnt = 0;
